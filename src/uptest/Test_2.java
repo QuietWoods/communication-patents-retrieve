@@ -24,7 +24,7 @@ public class Test_2 {
 	public void method1(String file) {
 		FileWriter fw = null;
 		try {
-			// Èç¹ûÎÄ¼ş´æÔÚ£¬Ôò×·¼ÓÄÚÈİ£»Èç¹ûÎÄ¼ş²»´æÔÚ£¬Ôò´´½¨ÎÄ¼ş
+			// å¦‚æœæ–‡ä»¶å­˜åœ¨ï¼Œåˆ™è¿½åŠ å†…å®¹ï¼›å¦‚æœæ–‡ä»¶ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºæ–‡ä»¶
 			File f = new File(file);
 			fw = new FileWriter(f, true);
 		} catch (IOException e) {
@@ -60,11 +60,11 @@ public class Test_2 {
 
 	public static void method3(String fileName, String content) {
 		try {
-			// ´ò¿ªÒ»¸öËæ»ú·ÃÎÊÎÄ¼şÁ÷£¬°´¶ÁĞ´·½Ê½
+			// æ‰“å¼€ä¸€ä¸ªéšæœºè®¿é—®æ–‡ä»¶æµï¼ŒæŒ‰è¯»å†™æ–¹å¼
 			RandomAccessFile randomFile = new RandomAccessFile(fileName, "rw");
-			// ÎÄ¼ş³¤¶È£¬×Ö½ÚÊı
+			// æ–‡ä»¶é•¿åº¦ï¼Œå­—èŠ‚æ•°
 			long fileLength = randomFile.length();
-			// ½«Ğ´ÎÄ¼şÖ¸ÕëÒÆµ½ÎÄ¼şÎ²¡£
+			// å°†å†™æ–‡ä»¶æŒ‡é’ˆç§»åˆ°æ–‡ä»¶å°¾ã€‚
 			randomFile.seek(fileLength);
 			randomFile.writeBytes(content + "\r\n");
 			randomFile.close();
@@ -75,116 +75,116 @@ public class Test_2 {
 
 	public static void main(String args[]) throws UnsupportedEncodingException {
 		Element element = null;
-		// ¿ÉÒÔÊ¹ÓÃ¾ø¶ÔÂ·¾¶
+		// å¯ä»¥ä½¿ç”¨ç»å¯¹è·¯å¾„
 
 		String string = new String("201480001710NEW");
-		String str = "E:\\Í¨Ñ¶×¨ÀûÎÄ±¾\\" + string + ".xml";
+		String str = "E:\\é€šè®¯ä¸“åˆ©æ–‡æœ¬\\" + string + ".xml";
 		File file = new File(URLDecoder.decode(str, "UTF-8"));
 		Test_2 a = new Test_2();
-		// documentBuilderÎª³éÏó²»ÄÜÖ±½ÓÊµÀı»¯£¨½«XMLÎÄ¼ş×ª»»ÎªDOMÎÄ¼ş£©
+		// documentBuilderä¸ºæŠ½è±¡ä¸èƒ½ç›´æ¥å®ä¾‹åŒ–ï¼ˆå°†XMLæ–‡ä»¶è½¬æ¢ä¸ºDOMæ–‡ä»¶ï¼‰
 		DocumentBuilder db = null;
 		DocumentBuilderFactory dbf = null;
 		// IgnoreDtd ignore = new IgnoreDtd();
 		// DocumentBuilderFactory.setValidating(false);
 		// dbf.setValidating(false);
 		try {
-			// ·µ»ØdocumentBuilderFactory¶ÔÏó
+			// è¿”å›documentBuilderFactoryå¯¹è±¡
 			dbf = DocumentBuilderFactory.newInstance();
 			// dbf.setValidating(false);
-			// ·µ»Ødb¶ÔÏóÓÃdocumentBuilderFactory¶ÔÏó»ñµÃ·µ»ØdocumentBuilder¶ÔÏó
+			// è¿”å›dbå¯¹è±¡ç”¨documentBuilderFactoryå¯¹è±¡è·å¾—è¿”å›documentBuilderå¯¹è±¡
 			db = dbf.newDocumentBuilder();
-			// µÃµ½Ò»¸öDOM²¢·µ»Ø¸ødocument¶ÔÏó
+			// å¾—åˆ°ä¸€ä¸ªDOMå¹¶è¿”å›ç»™documentå¯¹è±¡
 			Document dt = db.parse(file);
-			// µÃµ½Ò»¸öelement¸ùÔªËØ
+			// å¾—åˆ°ä¸€ä¸ªelementæ ¹å…ƒç´ 
 			element = dt.getDocumentElement();
-			// »ñµÃ¸ù½Úµã
-			System.out.println("¸ùÔªËØ" + ".." + element.getNodeType());
-			// »ñµÃ¸ùÔªËØÏÂµÄ×Ó½Úµã
+			// è·å¾—æ ¹èŠ‚ç‚¹
+			System.out.println("æ ¹å…ƒç´ " + ".." + element.getNodeType());
+			// è·å¾—æ ¹å…ƒç´ ä¸‹çš„å­èŠ‚ç‚¹
 			NodeList childNodes = element.getChildNodes();
-			// ±éÀúÕâĞ©×Ó½Úµã
+			// éå†è¿™äº›å­èŠ‚ç‚¹
 			for (int i = 0; i < childNodes.getLength(); i++) {
-				// »ñµÃÃ¿¸ö¶ÔÓ¦Î»ÖÃiµÄ½áµã
+				// è·å¾—æ¯ä¸ªå¯¹åº”ä½ç½®içš„ç»“ç‚¹
 				Node node1 = childNodes.item(i);
 				if ("cn-bibliographic-data".equals(node1.getNodeName())) {
-					// Èç¹û½áµãµÄÃû³ÆÎª¡°cn-patent-document¡±£¬Ôò¼ÌĞø±éÀú×Ó½Úµã
-					// »ñµÃ<cn-patent-document>ÏÂµÄ½Úµã
+					// å¦‚æœç»“ç‚¹çš„åç§°ä¸ºâ€œcn-patent-documentâ€ï¼Œåˆ™ç»§ç»­éå†å­èŠ‚ç‚¹
+					// è·å¾—<cn-patent-document>ä¸‹çš„èŠ‚ç‚¹
 					NodeList nodeDetail = node1.getChildNodes();
-					// ±éÀú<cn-patent-document>ÏÂµÄ½Úµã
+					// éå†<cn-patent-document>ä¸‹çš„èŠ‚ç‚¹
 					for (int j = 0; j < nodeDetail.getLength(); j++) {
-						// »ñµÃ<cn-bibliographic-data>ÔªËØÃ¿Ò»¸ö½Úµã
+						// è·å¾—<cn-bibliographic-data>å…ƒç´ æ¯ä¸€ä¸ªèŠ‚ç‚¹
 						Node detail1 = nodeDetail.item(j);
 						if ("cn-publication-reference".equals(detail1.getNodeName()))
-						// ×Ó½ÚµãÎªcn-publication-reference£¬¼ÌĞø±éÀú
-						// »ñµÃ<cn-publication-reference>ÏÂµÄ½áµã
+						// å­èŠ‚ç‚¹ä¸ºcn-publication-referenceï¼Œç»§ç»­éå†
+						// è·å¾—<cn-publication-reference>ä¸‹çš„ç»“ç‚¹
 						{
 							NodeList nodeDetail1_2 = detail1.getChildNodes();
-							// ±éÀú<cn-publication-reference>ÏÂµÄ½áµã
+							// éå†<cn-publication-reference>ä¸‹çš„ç»“ç‚¹
 							for (int k = 0; k < nodeDetail1_2.getLength(); k++) {
-								// »ñµÃ<cn-publication-reference>ÔªËØÃ¿Ò»¸ö½áµã
+								// è·å¾—<cn-publication-reference>å…ƒç´ æ¯ä¸€ä¸ªç»“ç‚¹
 								Node detail1_2_3 = nodeDetail1_2.item(k);
 								if ("document-id".equals(detail1_2_3.getNodeName())) {
-									// ×Ó½ÚµãÎªdocument-id£¬¼ÌĞø±éÀú
-									// »ñµÃdocument-idÏÂµÄ½áµã
+									// å­èŠ‚ç‚¹ä¸ºdocument-idï¼Œç»§ç»­éå†
+									// è·å¾—document-idä¸‹çš„ç»“ç‚¹
 									NodeList nodeDetail1_2_3 = detail1_2_3.getChildNodes();
-									// ±éÀúdocument-idÏÂµÄ½áµã
+									// éå†document-idä¸‹çš„ç»“ç‚¹
 									for (int m = 0; m < nodeDetail1_2_3.getLength(); m++) {
-										// »ñµÃdocument-idÔªËØÃ¿Ò»½áµã
+										// è·å¾—document-idå…ƒç´ æ¯ä¸€ç»“ç‚¹
 										Node detail1_2_3_4 = nodeDetail1_2_3.item(m);
 										if ("country".equals(detail1_2_3_4.getNodeName())) {
-											// ×Ó½ÚµãÎªcountry£¬Êä³ö
-											System.out.println("country:  " + detail1_2_3_4.getTextContent());
+											// å­èŠ‚ç‚¹ä¸ºcountryï¼Œè¾“å‡º
+											//System.out.println("country:  " + detail1_2_3_4.getTextContent());
 										} else if ("doc-number".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("doc-number: " + detail1_2_3_4.getTextContent());
+											//System.out.println("doc-number: " + detail1_2_3_4.getTextContent());
 										} else if ("kind".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("kind: " + detail1_2_3_4.getTextContent());
+											//System.out.println("kind: " + detail1_2_3_4.getTextContent());
 										} else if ("date".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("date: " + detail1_2_3_4.getTextContent());
+											//System.out.println("date: " + detail1_2_3_4.getTextContent());
 										}
 									}
 
 								} else if ("gazette-reference".equals(detail1_2_3.getNodeName()))
-								// ×Ó½ÚµãÎªgazette-reference£¬¼ÌĞø±éÀú
-								// »ñµÃgazette-referenceÏÂµÄ½áµã
+								// å­èŠ‚ç‚¹ä¸ºgazette-referenceï¼Œç»§ç»­éå†
+								// è·å¾—gazette-referenceä¸‹çš„ç»“ç‚¹
 								{
 									NodeList nodeDetail1_2_3 = detail1_2_3.getChildNodes();
-									// ±éÀúdocument-idÏÂµÄ½áµã
+									// éå†document-idä¸‹çš„ç»“ç‚¹
 									for (int m = 0; m < nodeDetail1_2_3.getLength(); m++) {
-										// »ñµÃdocument-idÔªËØÃ¿Ò»½áµã
+										// è·å¾—document-idå…ƒç´ æ¯ä¸€ç»“ç‚¹
 										Node detail1_2_3_4 = nodeDetail1_2_3.item(m);
 										if ("gazette-num".equals(detail1_2_3_4.getNodeName())) {
-											// ×Ó½ÚµãÎªcountry£¬Êä³ö
-											System.out.println("gazette-num:  " + detail1_2_3_4.getTextContent());
+											// å­èŠ‚ç‚¹ä¸ºcountryï¼Œè¾“å‡º
+											//System.out.println("gazette-num:  " + detail1_2_3_4.getTextContent());
 										} else if ("date".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("date: " + detail1_2_3_4.getTextContent());
+											//System.out.println("date: " + detail1_2_3_4.getTextContent());
 										}
 									}
 								}
 
 							}
 						} else if ("application-reference".equals(detail1.getNodeName())) {
-							System.out.println("application-reference: "
-									+ detail1.getAttributes().getNamedItem("appl-type").getNodeValue() + ". ");
+							//System.out.println("application-reference: "
+							//		+ detail1.getAttributes().getNamedItem("appl-type").getNodeValue() + ". ");
 							NodeList nodeDetail1_2 = detail1.getChildNodes();
-							// ±éÀú<application-reference>ÏÂµÄ½áµã
+							// éå†<application-reference>ä¸‹çš„ç»“ç‚¹
 							for (int k = 0; k < nodeDetail1_2.getLength(); k++) {
-								// »ñµÃ<application-reference>ÔªËØÃ¿Ò»¸ö½áµã
+								// è·å¾—<application-reference>å…ƒç´ æ¯ä¸€ä¸ªç»“ç‚¹
 								Node detail1_2_3 = nodeDetail1_2.item(k);
 								if ("document-id".equals(detail1_2_3.getNodeName())) {
 									NodeList nodeDetail1_2_3 = detail1_2_3.getChildNodes();
-									// ±éÀúdocument-idÏÂµÄ½áµã
-									System.out.println("document-id");
+									// éå†document-idä¸‹çš„ç»“ç‚¹
+									//System.out.println("document-id");
 									for (int m = 0; m < nodeDetail1_2_3.getLength(); m++) {
-										// »ñµÃdocument-idÔªËØÃ¿Ò»½áµã
+										// è·å¾—document-idå…ƒç´ æ¯ä¸€ç»“ç‚¹
 										Node detail1_2_3_4 = nodeDetail1_2_3.item(m);
 										if ("country".equals(detail1_2_3_4.getNodeName())) {
-											// ×Ó½ÚµãÎªcountry£¬Êä³ö
-											System.out.println("country:  " + detail1_2_3_4.getTextContent());
+											// å­èŠ‚ç‚¹ä¸ºcountryï¼Œè¾“å‡º
+											//System.out.println("country:  " + detail1_2_3_4.getTextContent());
 										} else if ("doc-number".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("doc-number: " + detail1_2_3_4.getTextContent());
+											//System.out.println("doc-number: " + detail1_2_3_4.getTextContent());
 										} else if ("kind".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("kind: " + detail1_2_3_4.getTextContent());
+											//System.out.println("kind: " + detail1_2_3_4.getTextContent());
 										} else if ("date".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("date: " + detail1_2_3_4.getTextContent());
+											//System.out.println("date: " + detail1_2_3_4.getTextContent());
 										}
 									}
 								}
@@ -194,24 +194,24 @@ public class Test_2 {
 						} else if ("priority-claims".equals(detail1.getNodeName())) {
 
 							NodeList nodeDetail1_2 = detail1.getChildNodes();
-							// ±éÀú<priority-claims>ÏÂµÄ½áµã
+							// éå†<priority-claims>ä¸‹çš„ç»“ç‚¹
 							for (int k = 0; k < nodeDetail1_2.getLength(); k++) {
-								// »ñµÃ<priority-claims>ÔªËØÃ¿Ò»¸ö½áµã
+								// è·å¾—<priority-claims>å…ƒç´ æ¯ä¸€ä¸ªç»“ç‚¹
 								Node detail1_2_3 = nodeDetail1_2.item(k);
 								if ("priority-claim".equals(detail1_2_3.getNodeName())) {
-									System.out.println("priority-claim");
+									//System.out.println("priority-claim");
 									NodeList nodeDetail1_2_3 = detail1_2_3.getChildNodes();
-									// ±éÀúpriority-claimÏÂµÄ½áµã
+									// éå†priority-claimä¸‹çš„ç»“ç‚¹
 									for (int m = 0; m < nodeDetail1_2_3.getLength(); m++) {
-										// »ñµÃpriority-claimÔªËØÃ¿Ò»½áµã
+										// è·å¾—priority-claimå…ƒç´ æ¯ä¸€ç»“ç‚¹
 										Node detail1_2_3_4 = nodeDetail1_2_3.item(m);
 										if ("country".equals(detail1_2_3_4.getNodeName())) {
-											// ×Ó½ÚµãÎªcountry£¬Êä³ö
-											System.out.println("country:  " + detail1_2_3_4.getTextContent());
+											// å­èŠ‚ç‚¹ä¸ºcountryï¼Œè¾“å‡º
+											//System.out.println("country:  " + detail1_2_3_4.getTextContent());
 										} else if ("doc-number".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("doc-number: " + detail1_2_3_4.getTextContent());
+											//System.out.println("doc-number: " + detail1_2_3_4.getTextContent());
 										} else if ("date".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("date: " + detail1_2_3_4.getTextContent());
+											//System.out.println("date: " + detail1_2_3_4.getTextContent());
 										}
 									}
 								}
@@ -219,25 +219,25 @@ public class Test_2 {
 							}
 
 						} else if ("classifications-ipcr".equals(detail1.getNodeName())) {
-							System.out.println("classifications-ipcr");
+							//System.out.println("classifications-ipcr");
 							NodeList nodeDetail1_2 = detail1.getChildNodes();
-							// ±éÀú<classifications-ipcr>ÏÂµÄ½áµã
+							// éå†<classifications-ipcr>ä¸‹çš„ç»“ç‚¹
 							for (int k = 0; k < nodeDetail1_2.getLength(); k++) {
-								// »ñµÃ<classifications-ipcr>ÔªËØÃ¿Ò»¸ö½áµã
+								// è·å¾—<classifications-ipcr>å…ƒç´ æ¯ä¸€ä¸ªç»“ç‚¹
 								Node detail1_2_3 = nodeDetail1_2.item(k);
 								if ("classification-ipcr".equals(detail1_2_3.getNodeName())) {
 									NodeList nodeDetail1_2_3 = detail1_2_3.getChildNodes();
-									// ±éÀúpriority-claimÏÂµÄ½áµã
+									// éå†priority-claimä¸‹çš„ç»“ç‚¹
 									for (int m = 0; m < nodeDetail1_2_3.getLength(); m++) {
-										// »ñµÃpriority-claimÔªËØÃ¿Ò»½áµã
+										// è·å¾—priority-claimå…ƒç´ æ¯ä¸€ç»“ç‚¹
 										Node detail1_2_3_4 = nodeDetail1_2_3.item(m);
 										if ("text".equals(detail1_2_3_4.getNodeName())) {
-											// ×Ó½ÚµãÎªcountry£¬Êä³ö
-											System.out.println("country:  " + detail1_2_3_4.getTextContent());
+											// å­èŠ‚ç‚¹ä¸ºcountryï¼Œè¾“å‡º
+											//System.out.println("country:  " + detail1_2_3_4.getTextContent());
 										} else if ("doc-number".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("doc-number: " + detail1_2_3_4.getTextContent());
+											//System.out.println("doc-number: " + detail1_2_3_4.getTextContent());
 										} else if ("date".equals(detail1_2_3_4.getNodeName())) {
-											System.out.println("date: " + detail1_2_3_4.getTextContent());
+											//System.out.println("date: " + detail1_2_3_4.getTextContent());
 										}
 									}
 								}
@@ -245,61 +245,61 @@ public class Test_2 {
 							}
 
 						} else if ("invention-title".equals(detail1.getNodeName())) {
-							System.out.println("invention-title: " + detail1.getTextContent());
-							a.method1("E:\\Í¨Ñ¶×¨ÀûÎÄ±¾\\Í¨Ñ¶×¨ÀûÎÄ±¾_txt\\" + string + ".txt");
-							a.method2("E:\\Í¨Ñ¶×¨ÀûÎÄ±¾\\Í¨Ñ¶×¨ÀûÎÄ±¾_txt\\" + string + ".txt", detail1.getTextContent());
+							//System.out.println("invention-title: " + detail1.getTextContent());
+							a.method1("E:\\é€šè®¯ä¸“åˆ©æ–‡æœ¬\\é€šè®¯ä¸“åˆ©æ–‡æœ¬_txt\\" + string + ".txt");
+							a.method2("E:\\é€šè®¯ä¸“åˆ©æ–‡æœ¬\\é€šè®¯ä¸“åˆ©æ–‡æœ¬_txt\\" + string + ".txt", detail1.getTextContent());
 							NodeList nodeDetail1_2 = detail1.getChildNodes();
 
 						} else if ("abstract".equals(detail1.getNodeName())) {
-							System.out.println("abstract: " + detail1.getTextContent());
+							//System.out.println("abstract: " + detail1.getTextContent());
 							String temp = detail1.getTextContent().replaceAll("\r", "");
 							temp = temp.replaceAll("\\s*", "");
-							a.method2("E:\\Í¨Ñ¶×¨ÀûÎÄ±¾\\Í¨Ñ¶×¨ÀûÎÄ±¾_txt\\" + string + ".txt", "ÕªÒª\r\n" + temp);
+							a.method2("E:\\é€šè®¯ä¸“åˆ©æ–‡æœ¬\\é€šè®¯ä¸“åˆ©æ–‡æœ¬_txt\\" + string + ".txt", "æ‘˜è¦\r\n" + temp);
 							NodeList nodeDetail1_2 = detail1.getChildNodes();
 
 						}
 					}
 				} else if ("application-body".equals(node1.getNodeName())) {
-					System.out.println("application-body");
+					//System.out.println("application-body");
 					NodeList nodeDetail1_2 = node1.getChildNodes();
-					// ±éÀú<classifications-ipcr>ÏÂµÄ½áµã
+					// éå†<classifications-ipcr>ä¸‹çš„ç»“ç‚¹
 					for (int k = 0; k < nodeDetail1_2.getLength(); k++) {
-						// »ñµÃ<classifications-ipcr>ÔªËØÃ¿Ò»¸ö½áµã
+						// è·å¾—<classifications-ipcr>å…ƒç´ æ¯ä¸€ä¸ªç»“ç‚¹
 						Node detail1_2_3 = nodeDetail1_2.item(k);
 						if ("description".equals(detail1_2_3.getNodeName())) {
-							System.out.println("description :");
+							//System.out.println("description :");
 							NodeList nodeDetail1_2_3 = detail1_2_3.getChildNodes();
 
-							// ±éÀúpriority-claimÏÂµÄ½áµã
+							// éå†priority-claimä¸‹çš„ç»“ç‚¹
 							for (int m = 0; m < nodeDetail1_2_3.getLength(); m++) {
-								// »ñµÃpriority-claimÔªËØÃ¿Ò»½áµã
+								// è·å¾—priority-claimå…ƒç´ æ¯ä¸€ç»“ç‚¹
 
 								Node detail1_2_3_4 = nodeDetail1_2_3.item(m);
 								if ("invention-title".equals(detail1_2_3_4.getNodeName())) {
-									// ×Ó½ÚµãÎªcn-applicant£¬Êä³ö
-									System.out.println("invention-title:  ");
+									// å­èŠ‚ç‚¹ä¸ºcn-applicantï¼Œè¾“å‡º
+									//System.out.println("invention-title:  ");
 								} else if ("p".equals(detail1_2_3_4.getNodeName())) {
-									System.out.println("" + detail1_2_3_4.getTextContent());
+									//System.out.println("" + detail1_2_3_4.getTextContent());
 									String temp = detail1_2_3_4.getTextContent().replaceAll("\r", "");
 									temp = temp.replaceAll("\\s*", "");
-									a.method2("E:\\Í¨Ñ¶×¨ÀûÎÄ±¾\\Í¨Ñ¶×¨ÀûÎÄ±¾_txt\\" + string + ".txt", temp);
+									a.method2("E:\\é€šè®¯ä¸“åˆ©æ–‡æœ¬\\é€šè®¯ä¸“åˆ©æ–‡æœ¬_txt\\" + string + ".txt", temp);
 								}
 							}
 						} else if ("claims".equals(detail1_2_3.getNodeName())) {
-							System.out.println("claims :");
+							//System.out.println("claims :");
 							NodeList nodeDetail1_2_3 = detail1_2_3.getChildNodes();
 							String temp = detail1_2_3.getTextContent().replaceAll("\r", "");
 							temp = temp.replaceAll("\\s*", "");
-							a.method2("E:\\Í¨Ñ¶×¨ÀûÎÄ±¾\\Í¨Ñ¶×¨ÀûÎÄ±¾_txt\\" + string + ".txt", temp);
+							a.method2("E:\\é€šè®¯ä¸“åˆ©æ–‡æœ¬\\é€šè®¯ä¸“åˆ©æ–‡æœ¬_txt\\" + string + ".txt", temp);
 
-							// ±éÀúpriority-claimÏÂµÄ½áµã
+							// éå†priority-claimä¸‹çš„ç»“ç‚¹
 							for (int m = 0; m < nodeDetail1_2_3.getLength(); m++) {
-								// »ñµÃpriority-claimÔªËØÃ¿Ò»½áµã
+								// è·å¾—priority-claimå…ƒç´ æ¯ä¸€ç»“ç‚¹
 
 								Node detail1_2_3_4 = nodeDetail1_2_3.item(m);
 								if ("claim".equals(detail1_2_3_4.getNodeName())) {
-									// ×Ó½ÚµãÎªcn-applicant£¬Êä³ö
-									System.out.println("" + detail1_2_3_4.getTextContent());
+									// å­èŠ‚ç‚¹ä¸ºcn-applicantï¼Œè¾“å‡º
+									//System.out.println("" + detail1_2_3_4.getTextContent());
 								}
 							}
 						}
