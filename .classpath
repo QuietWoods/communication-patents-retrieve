@@ -13,5 +13,7 @@
 	<classpathentry kind="lib" path="lib/lucene-analyzers-common-5.5.4.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-core-5.5.4.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-queryparser-5.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-api-2.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-core-2.8.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

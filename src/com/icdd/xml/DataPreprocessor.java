@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -15,6 +14,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
+
 /**
  * 专利名、专利号、专利摘要、权利要求书提取出来，把无用的标签和内容过滤掉 use StAx parser
  * 
@@ -22,6 +24,7 @@ import javax.xml.stream.XMLStreamWriter;
  *
  */
 public class DataPreprocessor {
+	private static Logger logger = (Logger) LogManager.getLogger("mylog");
 	/**
 	 * Determine the given file according to the classification of identifier
 	 * belongs to the category
@@ -111,138 +114,119 @@ public class DataPreprocessor {
 			writer.writeStartDocument("utf-8", "1.0");
 			// write XML document root node
 			writer.writeStartElement("cn-patent-document");
-
+			String titleStr = "invention-title";
 			while (parser.hasNext()) {
 				int event = parser.next();
-				if (event == XMLStreamConstants.START_ELEMENT) {
+				if (event == XMLStreamConstants.START_ELEMENT
+						&& "application-reference".equals(parser.getLocalName())) {
 					// patent number
-					if (parser.getLocalName().equals("application-reference")) {
-						boolean flag = false;
-						while (parser.hasNext() && flag == false) {
-							event = parser.next();
-							if (event == XMLStreamConstants.START_ELEMENT) {
+					boolean flag = false;
+					while (parser.hasNext() && flag == false) {
+						event = parser.next();
+						if (event == XMLStreamConstants.START_ELEMENT && "doc-number".equals(parser.getLocalName())) {
 
-								if (parser.getLocalName().equals("doc-number")) {
-									// write doc-number start element
-									writer.writeStartElement("doc-number");
-									event = parser.next();
-									if (event == XMLStreamConstants.CHARACTERS) {
-										if (parser.isWhiteSpace() == false) {
-											String number = parser.getText().trim();
-											writer.writeCharacters(number);
-											flag = true;
-										}
-									}
-								}
+							// write doc-number start element
+							writer.writeStartElement("doc-number");
+							event = parser.next();
+							if (event == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+								String number = parser.getText().trim();
+								writer.writeCharacters(number);
+								flag = true;
 							}
+
 						}
-						// write end patent number node
-						writer.writeEndElement();
 					}
+					// write end patent number node
+					writer.writeEndElement();
 				}
 
-				if (event == XMLStreamConstants.START_ELEMENT) {
+				if (event == XMLStreamConstants.START_ELEMENT && titleStr.equals(parser.getLocalName())) {
 					// patent title
-					if (parser.getLocalName().equals("invention-title")) {
-						int attrsCount = parser.getAttributeCount();
-						if (attrsCount == 0) {
-							writer.writeStartElement("invention-title");
-							event = parser.next();
-							if (event == XMLStreamConstants.CHARACTERS) {
-								if (parser.isWhiteSpace() == false) {
-									String title = parser.getText().trim();
-									writer.writeCharacters(title);
-								}
-							}
+					int attrsCount = parser.getAttributeCount();
+					if (attrsCount == 0) {
+						writer.writeStartElement(titleStr);
+						event = parser.next();
+						if (event == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+							String title = parser.getText().trim();
+							writer.writeCharacters(title);
 						}
 					}
 				}
-				if (event == XMLStreamConstants.START_ELEMENT) {
+				if (event == XMLStreamConstants.START_ELEMENT && "p".equals(parser.getLocalName())) {
 					// patent abstract
-					if (parser.getLocalName().equals("p")) {
-						String numStr = parser.getAttributeValue(null, "num");
-						if (numStr.equals("1")) {
-							writer.writeEndElement();
-							writer.writeStartElement("abstract");
-							event = parser.next();
-							if (event == XMLStreamConstants.CHARACTERS) {
-								if (parser.isWhiteSpace() != true) {
-									String abstractStr = parser.getText().trim();
-									writer.writeCharacters(abstractStr);
-								}
-							}
+					String numStr = parser.getAttributeValue(null, "num");
+					if ("1".equals(numStr)) {
+						writer.writeEndElement();
+						writer.writeStartElement("abstract");
+						event = parser.next();
+						if (event == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+							String abstractStr = parser.getText().trim();
+							writer.writeCharacters(abstractStr);
 						}
 					}
 				}
 				// description
-				if (event == XMLStreamConstants.START_ELEMENT) {
-					if (parser.getLocalName().equals("description")) {
-						writer.writeEndElement();
-						writer.writeStartElement("description");
-						writer.writeStartElement("p");
-						while (parser.hasNext()) {
-							int inevent = parser.next();
-							// 遇到p标签就换行
-							if (inevent == XMLStreamConstants.START_ELEMENT)
-								if (parser.getLocalName().equals("p")) {
-									writer.writeEndElement();
-									writer.writeStartElement("p");
-								}
-							if (inevent == XMLStreamConstants.END_ELEMENT) {
-								if (parser.getLocalName().equals("description"))
-									break;
+				if (event == XMLStreamConstants.START_ELEMENT && "description".equals(parser.getLocalName())) {
+					writer.writeEndElement();
+					writer.writeStartElement("description");
+					writer.writeStartElement("p");
+					while (parser.hasNext()) {
+						int inevent = parser.next();
+						// 遇到p标签就换行
+						if (inevent == XMLStreamConstants.START_ELEMENT && "p".equals(parser.getLocalName())){
+								writer.writeEndElement();
+								writer.writeStartElement("p");
 							}
-							if (inevent == XMLStreamConstants.CHARACTERS) {
-								if (parser.isWhiteSpace() != true) {
-									String description = parser.getText().trim();
-									writer.writeCharacters(description);
-								}
-							}
-
+						if (inevent == XMLStreamConstants.END_ELEMENT && "description".equals(parser.getLocalName())) {
+								break;
 						}
-						writer.writeEndElement();
-						writer.writeEndElement();
+						if (inevent == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+							String description = parser.getText().trim();
+							writer.writeCharacters(description);
+						}
+
 					}
+					writer.writeEndElement();
+					writer.writeEndElement();
+
 				}
 				// claims
-				if (event == XMLStreamConstants.START_ELEMENT) {
-					if (parser.getLocalName().equals("claims")) {
-						writer.writeStartElement("claims");
-						while (parser.hasNext()) {
-							int inevent = parser.next();
-							// 遇到claim标签就换行
-							if (inevent == XMLStreamConstants.START_ELEMENT && parser.getLocalName().equals("claim"))
+				if (event == XMLStreamConstants.START_ELEMENT && "claims".equals(parser.getLocalName())) {
 
-								writer.writeStartElement("p");
-							if (inevent == XMLStreamConstants.END_ELEMENT) {
-								if (parser.getLocalName().equals("claim"))
-									writer.writeEndElement();
-								if (parser.getLocalName().equals("claims"))
-									break;
-							}
-							if (inevent == XMLStreamConstants.CHARACTERS) {
-								if (parser.isWhiteSpace() != true) {
-									String claims = parser.getText().trim();
-									writer.writeCharacters(claims);
-								}
-							}
+					writer.writeStartElement("claims");
+					while (parser.hasNext()) {
+						int inevent = parser.next();
+						// 遇到claim标签就换行
+						if (inevent == XMLStreamConstants.START_ELEMENT && "claim".equals(parser.getLocalName()))
+
+							writer.writeStartElement("p");
+						if (inevent == XMLStreamConstants.END_ELEMENT) {
+							if ("claim".equals(parser.getLocalName()))
+								writer.writeEndElement();
+							if ("claims".equals(parser.getLocalName()))
+								break;
+						}
+						if (inevent == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+
+							String claims = parser.getText().trim();
+							writer.writeCharacters(claims);
 
 						}
-						writer.writeEndElement();
+
 					}
+					writer.writeEndElement();
+
 				}
-	}
+			}
 			writer.writeEndElement();
 			writer.writeEndDocument();
 			writer.flush();
 			writer.close();
 
 		} catch (XMLStreamException e) {
-			System.out.println("XMLStreamException: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("XMLStreamException: " + e.getMessage());			
 		} catch (IOException e) {
-			System.out.println("IOException: " + e.getMessage());
-			e.printStackTrace();
+			logger.error("IOException: " + e.getMessage());			
 		}
 	}
 

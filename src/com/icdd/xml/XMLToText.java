@@ -26,7 +26,7 @@ public class XMLToText {
 
 	public void xmlToTextRecursive() {
 		if(!source.exists()){
-			System.exit(-1);
+			return;
 		}
 		if (source.isDirectory()) {
 			String[] fileNames = source.list();
