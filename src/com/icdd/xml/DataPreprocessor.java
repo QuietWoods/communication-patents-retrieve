@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -24,20 +26,39 @@ import org.apache.logging.log4j.core.Logger;
  *
  */
 public class DataPreprocessor {
+	private static Map<String, String> identify = new HashMap<>();
 	private static Logger logger = (Logger) LogManager.getLogger("mylog");
+
+	// 初始化块
+	static {
+		identify.put("H", "电学");
+		identify.put("H01", "基本电气元件");
+		identify.put("H02", "发电、变电或配电");
+		identify.put("H03", "基本电子电路");
+		identify.put("H04", "电通信技术");
+		identify.put("H05", "其他类目不包含的电技术");
+		identify.put("H99", "本部中其他类目不包括的技术主题[8]");
+	}
+
+	public static Map<String, String> getIdentify() {
+		return identify;
+	}
+
+	public static void setIdentify(Map<String, String> identify) {
+		DataPreprocessor.identify = identify;
+	}
+
 	/**
 	 * Determine the given file according to the classification of identifier
 	 * belongs to the category
 	 * 
 	 * @param file
 	 *            the XML data file
-	 * @param identity
-	 *            the class identifier
 	 * @return true or false
 	 * @throws FileNotFoundException
 	 * @throws XMLStreamException
 	 */
-	public boolean isTeleXML(File file, String identity) {
+	public boolean isTeleXML(File file) {
 		boolean result = false;
 		InputStream in;
 		try {
@@ -52,35 +73,33 @@ public class DataPreprocessor {
 
 			while (parser.hasNext()) {
 				int event = parser.next();
-				if (event == XMLStreamConstants.START_ELEMENT) {
-					if (parser.getLocalName().equals("classification-ipcr")) {
-						while (parser.hasNext()) {
-							int inevent = parser.next();
-							if (inevent == XMLStreamConstants.END_ELEMENT) {
-								if (parser.getLocalName().equals("text"))
-									break;
-							}
-							if (inevent == XMLStreamConstants.CHARACTERS) {
-								if (parser.isWhiteSpace() != true) {
-									classify = parser.getText().trim();
-								}
-							}
+				if (event == XMLStreamConstants.START_ELEMENT && "classification-ipcr".equals(parser.getLocalName())) {
+					while (parser.hasNext()) {
+						int inevent = parser.next();
 
+						if (inevent == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+							classify = parser.getText().trim();
+							classify =classify.substring(0, 3);
 						}
-						if (classify.indexOf(identity) == 0) {
-							result = true;
+						if (inevent == XMLStreamConstants.END_ELEMENT && "text".equals(parser.getLocalName())) {
 							break;
 						}
+
 					}
+					if (identify.containsKey(classify)) {
+						result = true;
+						break;
+					}
+
 				}
 
 			}
 		} catch (XMLStreamException e) {
-			System.out.println("classify XMLStreamException: " + e.getMessage());
-			e.printStackTrace();
+			logger.info("classify XMLStreamException: " + e.getMessage());
+
 		} catch (FileNotFoundException e) {
-			System.out.println("classify FileNotFoundException: " + e.getMessage());
-			e.printStackTrace();
+			logger.info("classify FileNotFoundException: " + e.getMessage());
+
 		}
 		return result;
 	}
@@ -173,12 +192,12 @@ public class DataPreprocessor {
 					while (parser.hasNext()) {
 						int inevent = parser.next();
 						// 遇到p标签就换行
-						if (inevent == XMLStreamConstants.START_ELEMENT && "p".equals(parser.getLocalName())){
-								writer.writeEndElement();
-								writer.writeStartElement("p");
-							}
+						if (inevent == XMLStreamConstants.START_ELEMENT && "p".equals(parser.getLocalName())) {
+							writer.writeEndElement();
+							writer.writeStartElement("p");
+						}
 						if (inevent == XMLStreamConstants.END_ELEMENT && "description".equals(parser.getLocalName())) {
-								break;
+							break;
 						}
 						if (inevent == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
 							String description = parser.getText().trim();
@@ -224,9 +243,9 @@ public class DataPreprocessor {
 			writer.close();
 
 		} catch (XMLStreamException e) {
-			logger.error("XMLStreamException: " + e.getMessage());			
+			logger.error("XMLStreamException: " + e.getMessage());
 		} catch (IOException e) {
-			logger.error("IOException: " + e.getMessage());			
+			logger.error("IOException: " + e.getMessage());
 		}
 	}
 

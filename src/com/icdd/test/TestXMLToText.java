@@ -6,18 +6,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.junit.Test;
 
-import com.icdd.xml.XMLToText;
+import com.icdd.xml.XMLHandler;
 
 public class TestXMLToText {
 	private static Logger logger = (Logger) LogManager.getLogger("mylog");
 	@Test
 	public void xml2TextTest(){
-		File source = new File("f:\\download\\source");
+		File source = new File("F:\\研一课程\\信息检索与搜索引擎\\CN-TXTO-10-A_中国发明专利申请公布全文文本数据");
+		//File source = new File("F:\\download\\source");
 		File target = new File("f:\\download\\target");
-		XMLToText xtt = new XMLToText(source, target,"H");
+		XMLHandler xtt = new XMLHandler(source, target);
 		long start = System.currentTimeMillis();
 		logger.error("begin: ");
-		xtt.xmlToTextRecursive();
+		xtt.xmlsFormat();
 		
 		long end = System.currentTimeMillis();
 		

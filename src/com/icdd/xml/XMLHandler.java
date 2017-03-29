@@ -3,31 +3,23 @@ package com.icdd.xml;
 import java.io.File;
 import java.io.IOException;
 
-public class XMLToText {
+public class XMLHandler {
 	private static final DataPreprocessor dataPre = new DataPreprocessor();
 	private File source;
 	private File target;
-	private String identity = null;
+	private static final int MAX_XML_FILES = 50000; 
+	private static int num = 0;
 
-	public XMLToText() {
-
+	public XMLHandler() {
+		//
 	}
 
-	public XMLToText(File source, File target) {
+	public XMLHandler(File source, File target) {
 		this.source = source;
 		this.target = target;
 	}
 
-	public XMLToText(File source, File target, String identity) {
-		this.source = source;
-		this.target = target;
-		this.identity = identity;
-	}
-
-	public void xmlToTextRecursive() {
-		if(!source.exists()){
-			return;
-		}
+	public void xmlsFormat() {
 		if (source.isDirectory()) {
 			String[] fileNames = source.list();
 			// enumerate all files in the directory
@@ -36,25 +28,29 @@ public class XMLToText {
 				try {
 					System.out.println(f.getCanonicalPath());
 				} catch (IOException e) {
-					System.out.println("not path");
-				}
+					System.out.println("this file not exits");
+}
 				// if the file is again a directory, call the xmlToText method
 				// recursively
 				if (f.isDirectory()) {
 					this.source = f;
-					xmlToTextRecursive();
+					xmlsFormat();
 				} else {
-					
-					
-					if (identity != null && dataPre.isTeleXML(f, identity)) {
-						dataPre.purifyXML(f, target);
-					}
+					xmlFormat(f);
 				}
 			}
 		} else {
-			if (identity != null && dataPre.isTeleXML(source, identity)) {
-				dataPre.purifyXML(source, target);
-			}
+			xmlFormat(source);
+		}
+	}
+
+	public void xmlFormat(File file) {
+		num++;
+		if(num > MAX_XML_FILES){
+			System.exit(0);
+		}
+		if (dataPre.isTeleXML(file)) {
+			dataPre.purifyXML(file, target);
 		}
 	}
 }
