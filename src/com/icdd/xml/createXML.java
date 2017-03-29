@@ -25,14 +25,14 @@ public class createXML {
 		writer.writeAttribute("name", "mypatent");
 		
 		writer.writeStartElement("title");
-		writer.writeCharacters("wo");
-		writer.writeCharacters("shi");
+		writer.writeCharacters("this is a");
+		writer.writeCharacters("title");
 		writer.writeEndElement();
 		
 		writer.writeStartElement("claim");
 		writer.writeAttribute("claims", "any");
-		writer.writeCharacters("wo");
-		writer.writeCharacters("shi");
+		writer.writeCharacters("this");
+		writer.writeCharacters("is");
 		writer.writeCharacters("a");
 		writer.writeCharacters("claim");
 		writer.writeEndElement();
