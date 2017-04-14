@@ -1,14 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://java.sun.com/jstl/fmt</taglib-uri>
+      <taglib-location>/WEB-INF/fmt.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://java.sun.com/jstl/fmt-rt</taglib-uri>
+      <taglib-location>/WEB-INF/fmt-rt.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
+      <taglib-location>/WEB-INF/c.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://java.sun.com/jstl/core-rt</taglib-uri>
+      <taglib-location>/WEB-INF/c-rt.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://java.sun.com/jstl/sql</taglib-uri>
+      <taglib-location>/WEB-INF/sql.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://java.sun.com/jstl/sql-rt</taglib-uri>
+      <taglib-location>/WEB-INF/sql-rt.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://java.sun.com/jstl/x</taglib-uri>
+      <taglib-location>/WEB-INF/x.tld</taglib-location>
+    </taglib>
+    <taglib>
+      <taglib-uri>http://java.sun.com/jstl/x-rt</taglib-uri>
+      <taglib-location>/WEB-INF/x-rt.tld</taglib-location>
+    </taglib>
+  </jsp-config>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list>  
+  <servlet>
+    <servlet-name>Index</servlet-name>
+    <servlet-class>com.icdd.service.Index</servlet-class>
+  </servlet>
   <servlet>
     <servlet-name>Search</servlet-name>
-    <servlet-class>service.Search</servlet-class>
+    <servlet-class>com.icdd.service.Search</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>Detail</servlet-name>
+    <servlet-class>com.icdd.service.Detail</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Index</servlet-name>
+    <url-pattern>/CommunicationPatentsRetrieve/Index</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Search</servlet-name>
     <url-pattern>/CommunicationPatentsRetrieve/Search</url-pattern>
   </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>Detail</servlet-name>
+    <url-pattern>/CommunicationPatentsRetrieve/Detail</url-pattern>
+  </servlet-mapping> 
 </web-app>

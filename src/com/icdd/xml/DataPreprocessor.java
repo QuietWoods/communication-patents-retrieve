@@ -28,6 +28,7 @@ import org.apache.logging.log4j.core.Logger;
 public class DataPreprocessor {
 	private static Map<String, String> identify = new HashMap<>();
 	private static Logger logger = (Logger) LogManager.getLogger("mylog");
+	private static ParserSource px = new ParserSource();
 
 	// 初始化块
 	static {
@@ -37,7 +38,7 @@ public class DataPreprocessor {
 		identify.put("H03", "基本电子电路");
 		identify.put("H04", "电通信技术");
 		identify.put("H05", "其他类目不包含的电技术");
-		identify.put("H99", "本部中其他类目不包括的技术主题[8]");
+		identify.put("H99", "本部中其他类目不包括的技术主题");
 	}
 
 	public static Map<String, String> getIdentify() {
@@ -65,7 +66,6 @@ public class DataPreprocessor {
 			in = new FileInputStream(file);
 
 			XMLInputFactory factory = XMLInputFactory.newInstance();
-			// factory.setProperty(XMLInputFactory.IS_VALIDATING, false);
 			XMLStreamReader parser;
 
 			parser = factory.createXMLStreamReader(in, "utf-8");
@@ -114,8 +114,8 @@ public class DataPreprocessor {
 	 * @throws XMLStreamException
 	 */
 	public void purifyXML(File file, File target) {
-		// 目标文件名，与原文件同名
-		String newFileName = file.getName();
+		// 目标文件名格式：原文件同名_专利标题。  
+		String newFileName = file.getName().replace(".XML", "")+"_"+px.readDataForIndexTitle(file)+".xml";
 		try {
 			// xml 输出流
 			XMLOutputFactory outfactory = XMLOutputFactory.newInstance();
@@ -156,6 +156,29 @@ public class DataPreprocessor {
 						}
 					}
 					// write end patent number node
+					writer.writeEndElement();
+				}
+				//classification
+				if (event == XMLStreamConstants.START_ELEMENT
+						&& "classifications-ipcr".equals(parser.getLocalName())) {
+					// patent classification
+					boolean flag = false;
+					while (parser.hasNext() && flag == false) {
+						event = parser.next();
+						if (event == XMLStreamConstants.START_ELEMENT && "text".equals(parser.getLocalName())) {
+
+							// write classification start element
+							writer.writeStartElement("classification");
+							event = parser.next();
+							if (event == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+								String classify = parser.getText().trim();
+								writer.writeCharacters(classify);
+								flag = true;
+							}
+
+						}
+					}
+					// write end patent classification node
 					writer.writeEndElement();
 				}
 
