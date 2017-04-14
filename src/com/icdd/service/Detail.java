@@ -1,8 +1,10 @@
 package com.icdd.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,68 +15,60 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
-import org.apache.lucene.document.Document;
 
-import com.icdd.lucene.QueryToCategory;
-import com.icdd.lucene.SearchIndex;
+import com.icdd.xml.ParserSource;
 
 /**
- * Servlet implementation class Search
- * 提供搜索文献的服务，返回与关键字相关的文献内容。
+ * Servlet implementation class Detail
  */
-@WebServlet("/Search")
-public class Search extends HttpServlet {
+@WebServlet("/Detail")
+public class Detail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final Logger logger = (Logger) LogManager.getLogger("mylog");
     /**
-     * Default constructor. 
+     * @see HttpServlet#HttpServlet()
      */
-    public Search() {
-        //
+    public Detail() {
+        super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.error("Served at: "+request.getContextPath());
+		logger.error("Served at: "+request.getContextPath().getClass());
 		long start = System.currentTimeMillis();
 		HttpSession session = request.getSession(true);
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter result = response.getWriter();
-		String queryString = request.getParameter("keyword");
-		String category = request.getParameter("Category");
-		
-		if(category != null){
-			//queryString = new  QueryToCategory(category).getResult();
-			queryString = category;
-		}
-		if(queryString == null){
-			result.println("keyword: "+queryString);
+		String path = request.getParameter("path");
+		if(path == null){
+			result.println("path: "+path);
 			return;
-		}else{
-			queryString = new  QueryToCategory(queryString).getResult();
-		}
-		SearchIndex index = new SearchIndex();
-		
-		List<Document> docs = index.searchFiles(queryString, "contents");
-		session.setAttribute("docs", docs);
-		
-		if(category != null){
-			session.setAttribute("category", category);
-			response.sendRedirect("category.jsp");
-		}else{
-			response.sendRedirect("index.jsp");
 		}
 		
+		ParserSource px = new ParserSource();
+		File file = new File(path);
+
+		Map<String, String> detail  = px.readData(file);
+		/*for (Map.Entry<String, String> entry : detail.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			System.out.println(key + ": " + value);
+		}*/
+		session.setAttribute("detail", detail);		
+		response.sendRedirect("detail.jsp");
 		long end = System.currentTimeMillis();
 		logger.info("Detail.Servlet:"+(end-start)+" milliseconds");
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

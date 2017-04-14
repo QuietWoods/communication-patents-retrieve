@@ -57,13 +57,18 @@ public class ParserXML {
 				if (event == XMLStreamConstants.START_ELEMENT && "claims".equals(parser.getLocalName())) {
 					event = parser.next();
 					while (parser.hasNext()) {
-						
-						event = parser.next();
-						if (event == XMLStreamConstants.START_ELEMENT && "p".equals(parser.getLocalName())) {
+						if (event == XMLStreamConstants.START_ELEMENT && "claim".equals(parser.getLocalName())) {
 							event = parser.next();
-							if (event == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
-								String descContent = parser.getText().trim();
-								System.out.println(descContent);
+							while (parser.hasNext()) {
+								event = parser.next();
+								if (event == XMLStreamConstants.START_ELEMENT
+										&& "claim-text".equals(parser.getLocalName())) {
+									event = parser.next();
+									if (event == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+										String descContent = parser.getText().trim();
+										System.out.println(descContent);
+									}
+								}
 							}
 						}
 					}
@@ -78,6 +83,7 @@ public class ParserXML {
 			System.out.println(e.getMessage());
 		}
 	}
+
 	public void readDataSimple(File file) {
 		System.out.println("begin readData:");
 		InputStream in;
@@ -95,7 +101,7 @@ public class ParserXML {
 					}
 				}
 			}
-			
+
 			System.out.println("end readData:");
 
 		} catch (XMLStreamException e) {
@@ -103,5 +109,31 @@ public class ParserXML {
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public String readDataToStr(File file) {
+		StringBuffer sb = new StringBuffer();
+		InputStream in;
+		try {
+			in = new FileInputStream(file);
+			XMLInputFactory factory = XMLInputFactory.newInstance();
+			XMLStreamReader parser = factory.createXMLStreamReader(in, "utf-8");
+			while (parser.hasNext()) {
+				int event = parser.next();
+				if (event == XMLStreamConstants.START_ELEMENT) {
+					event = parser.next();
+					if (event == XMLStreamConstants.CHARACTERS && !parser.isWhiteSpace()) {
+						String content = parser.getText().trim();
+						sb.append(content);
+					}
+				}
+			}
+
+		} catch (XMLStreamException e) {
+			System.out.println(e.getMessage());
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+		return sb.toString();
 	}
 }

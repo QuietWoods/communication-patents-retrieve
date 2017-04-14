@@ -8,7 +8,7 @@ public class XMLHandler {
 	private File source;
 	private File target;
 	private static final int MAX_XML_FILES = 50000; 
-	private static int num = 0;
+	private int num = 0;
 
 	public XMLHandler() {
 		//

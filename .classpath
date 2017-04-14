@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="WebContent/WEB-INF/lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
@@ -8,13 +9,9 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="lib/hamcrest-core-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-analyzers-common-5.5.4.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-core-5.5.4.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-queryparser-5.5.4.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-api-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-core-2.8.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.0"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-analyzers-smartcn-5.5.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-queries-5.5.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/lucene-memory-5.5.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
